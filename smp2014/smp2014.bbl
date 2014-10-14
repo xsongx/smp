@@ -1,0 +1,150 @@
+\begin{thebibliography}{10}
+
+\bibitem{lu2008opinion}
+Lu, Y., Zhai, C.:
+\newblock Opinion integration through semi-supervised topic modeling.
+\newblock In: Proceedings of the 17th international conference on World Wide
+  Web, ACM (2008)  121--130
+
+\bibitem{pang2008opinion}
+Pang, B., Lee, L.:
+\newblock Opinion mining and sentiment analysis.
+\newblock Foundations and trends in information retrieval \textbf{2}(1-2)
+  (2008)  1--135
+
+\bibitem{liu2012sentiment}
+Liu, B.:
+\newblock Sentiment analysis and opinion mining.
+\newblock Synthesis Lectures on Human Language Technologies \textbf{5}(1)
+  (2012)  1--167
+
+\bibitem{barbosa2010robust}
+Barbosa, L., Feng, J.:
+\newblock Robust sentiment detection on twitter from biased and noisy data.
+\newblock In: Proceedings of the 23rd International Conference on Computational
+  Linguistics: Posters, Association for Computational Linguistics (2010)
+  36--44
+
+\bibitem{davidov2010enhanced}
+Davidov, D., Tsur, O., Rappoport, A.:
+\newblock Enhanced sentiment learning using twitter hashtags and smileys.
+\newblock In: Proceedings of the 23rd International Conference on Computational
+  Linguistics: Posters, Association for Computational Linguistics (2010)
+  241--249
+
+\bibitem{jiang2011target}
+Jiang, L., Yu, M., Zhou, M., Liu, X., Zhao, T.:
+\newblock Target-dependent twitter sentiment classification.
+\newblock In: Proceedings of the 49th Annual Meeting of the Association for
+  Computational Linguistics: Human Language Technologies-Volume 1, Association
+  for Computational Linguistics (2011)  151--160
+
+\bibitem{li2010micro}
+Li, G., Hoi, S.C., Chang, K., Jain, R.:
+\newblock Micro-blogging sentiment detection by collaborative online learning.
+\newblock In: Data Mining (ICDM), 2010 IEEE 10th International Conference on,
+  IEEE (2010)  893--898
+
+\bibitem{tan2011user}
+Tan, C., Lee, L., Tang, J., Jiang, L., Zhou, M., Li, P.:
+\newblock User-level sentiment analysis incorporating social networks.
+\newblock In: Proceedings of the 17th ACM SIGKDD international conference on
+  Knowledge discovery and data mining, ACM (2011)  1397--1405
+
+\bibitem{mostafa2013more}
+Mostafa, M.M.:
+\newblock More than words: Social networks’ text mining for consumer brand
+  sentiments.
+\newblock Expert Systems with Applications \textbf{40}(10) (2013)  4241--4251
+
+\bibitem{malouf2008taking}
+Malouf, R., Mullen, T.:
+\newblock Taking sides: User classification for informal online political
+  discourse.
+\newblock Internet Research \textbf{18}(2) (2008)  177--190
+
+\bibitem{liu2010comment}
+Liu, H., Zhao, Y., Qin, B., Liu, T.:
+\newblock Comment target extraction and sentiment classification.
+\newblock Journal of Chinese Information Processing \textbf{24}(1) (2010)
+  84--89
+
+\bibitem{zhai2011constrained}
+Zhai, Z., Liu, B., Xu, H., Jia, P.:
+\newblock Constrained lda for grouping product features in opinion mining.
+\newblock In: Advances in knowledge discovery and data mining.
+\newblock Springer (2011)  448--459
+
+\bibitem{blei2003latent}
+Blei, D.M., Ng, A.Y., Jordan, M.I.:
+\newblock Latent dirichlet allocation.
+\newblock the Journal of machine Learning research \textbf{3} (2003)  993--1022
+
+\bibitem{rosen2004author}
+Rosen-Zvi, M., Griffiths, T., Steyvers, M., Smyth, P.:
+\newblock The author-topic model for authors and documents.
+\newblock In: Proceedings of the 20th conference on Uncertainty in artificial
+  intelligence, AUAI Press (2004)  487--494
+
+\bibitem{ramage2009labeled}
+Ramage, D., Hall, D., Nallapati, R., Manning, C.D.:
+\newblock Labeled lda: A supervised topic model for credit attribution in
+  multi-labeled corpora.
+\newblock In: Proceedings of the 2009 Conference on Empirical Methods in
+  Natural Language Processing: Volume 1-Volume 1, Association for Computational
+  Linguistics (2009)  248--256
+
+\bibitem{mei2007topic}
+Mei, Q., Ling, X., Wondra, M., Su, H., Zhai, C.:
+\newblock Topic sentiment mixture: modeling facets and opinions in weblogs.
+\newblock In: Proceedings of the 16th international conference on World Wide
+  Web, ACM (2007)  171--180
+
+\bibitem{lin2009joint}
+Lin, C., He, Y.:
+\newblock Joint sentiment/topic model for sentiment analysis.
+\newblock In: Proceedings of the 18th ACM conference on Information and
+  knowledge management, ACM (2009)  375--384
+
+\bibitem{xieresonance}
+Xie, S., Tang, J., Wang, T.:
+\newblock Resonance elicits diffusion: Modeling subjectivity for retweeting
+  behavior analysis.
+\newblock Cognitive Computation (2014)  1--13
+
+\bibitem{walton1991bias}
+Walton, D.N.:
+\newblock Bias, critical doubt and fallacies.
+\newblock Argumentation and Advocacy \textbf{28} (1991)  1--22
+
+\bibitem{DBLP:conf/kdd/LiWDWC12}
+Li, R., Wang, S., Deng, H., Wang, R., Chang, K.C.C.:
+\newblock Towards social user profiling: unified and discriminative influence
+  model for inferring home locations.
+\newblock In: KDD. (2012)  1023--1031
+
+\bibitem{lazarsfeld_friendship_1954}
+Lazarsfeld, P.F., Merton, R.K.:
+\newblock Friendship as a social process: A substantive and methodological
+  analysis.
+\newblock In Berger, M., Abel, T., eds.: Freedom and control in modern society.
+\newblock Van Nostrand, New York (1954)
+
+\bibitem{mcpherson2001birds}
+McPherson, M., Smith-Lovin, L., Cook, J.M.:
+\newblock Birds of a feather: Homophily in social networks.
+\newblock Annual review of sociology (2001)  415--444
+
+\bibitem{thelwall2010emotion}
+Thelwall, M.:
+\newblock Emotion homophily in social network site messages.
+\newblock First Monday \textbf{15}(4) (2010)
+
+\bibitem{wilson2005recognizing}
+Wilson, T., Wiebe, J., Hoffmann, P.:
+\newblock Recognizing contextual polarity in phrase-level sentiment analysis.
+\newblock In: Proceedings of the conference on human language technology and
+  empirical methods in natural language processing, Association for
+  Computational Linguistics (2005)  347--354
+
+\end{thebibliography}

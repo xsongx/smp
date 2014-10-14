@@ -1,0 +1,79 @@
+Reviews For Paper
+Paper ID	121
+Title	Integrating Topic Related Opinions of Users on Social Media: A Separate Way
+Masked Reviewer ID:	Assigned_Reviewer_1
+Review:	
+Question	 
+Overall Rating	 Neutral
+Summary of the paper (what is being proposed and in what context) and a brief justification of your overall recommendation. One paragraph	 This paper deals with the opinion integration problem. 
+Authors propose a Subjectivity Model to integrate both topics of interest distribution of users and the distribution
+of opinions towards these topics. Both of distributions are computed from past contents of users.
+An integrated opinion summary is generated automatically.
+Subjectivity Model is established by identifying topics and opinions in an unsupervised way.
+Three (or more) strong points about the paper (Please be precise and explicit; clearly explain the value and nature of the contribution).	 Please see the detailed comments
+Three (or more) weak points about the paper (Please indicate clearly whether the paper has any mistakes, missing related work, or results that cannot be considered a contribution; write it so that the authors can understand what are seen as negative aspect	 Please see the detailed comments
+Relevant for APWEB	 Yes
+Significance	 Improvement over existing work
+Technical Depth and Quality of Content	 Syntactically complete but with limited contribution
+Detailed Evaluation (Contribution, Pros/Cons, Errors); please number each point	 The idea and the approach seem to be interesting. The paper is clear and well organized.
+
+Negative point: The formalization and validation of the proposed model are not completely sufficient.
+Masked Reviewer ID:	Assigned_Reviewer_2
+Review:	
+Question	 
+Overall Rating	 Neutral
+Summary of the paper (what is being proposed and in what context) and a brief justification of your overall recommendation. One paragraph	 The authors propose integrating user's opinions on different topics in streams of tweets. They tested their proposal against generative models that join topics and sentiments.
+Three (or more) strong points about the paper (Please be precise and explicit; clearly explain the value and nature of the contribution).	 The paper is in general well-written and the authors make a good survey of existing approaches and correctly motivate their research. The idea of Opinion Integration Problem is good and problem is interesting.
+Three (or more) weak points about the paper (Please indicate clearly whether the paper has any mistakes, missing related work, or results that cannot be considered a contribution; write it so that the authors can understand what are seen as negative aspect	 The proposed approach is quite simple and relies on existing prior solutions.
+It is also unclear how actually the model is different and better than existing models.
+Lastly, the evalaution of the model is not solid and is not convincing.
+Relevant for APWEB	 Yes
+Significance	 Improvement over existing work
+Technical Depth and Quality of Content	 Syntactically complete but with limited contribution
+Detailed Evaluation (Contribution, Pros/Cons, Errors); please number each point	 The problem with this paper is that it uses existing approaches and the experimental results are not conclusive.
+First, the authors use LDA which is well known. They claim that state-of-the-art approaches for topic detection do not work well on tweets due to their short size. However, LDA is not particularly useful for this problem too and there have been more advanced methods proposed, e.g.,
+
+Comparing Twitter and Traditional Media Using Topic Models. Zhao et al. ECIR2011
+Characterizing Microblogs with Topic Models. Ramage et al. ICWsM2010
+
+The choice of k is also arbitrary here.
+
+Second, the authors analyze results based on only one user. With this it is difficult to support the claim the authors make "..it is demonstrated that our model can give a detailed description for the subjectivity of users..."
+The remaining part of the experiments on link prediction is rather strange and surprising why the authors chose to evaluate their work in this way.
+
+Minor comments:
+-the name "two-parts" model sounds bit strange (maybe "two-stage model" would be better). Actually in Introduction the authors mention three stages.
+-change to "when he is using social media." in section 3
+-remove "and" from "tweets talk about and should" in page 4
+-add leading verb in the last sentence of sec. 4.1
+-change to "established framework" in sec 4.2
+-change to "we can make concrete Subjectivity Model" on page 6
+-change "We" to lowercase at last sentence of sec 4.3
+-change to "and gets a little better" in page 10
+Masked Reviewer ID:	Assigned_Reviewer_3
+Review:	
+Question	 
+Overall Rating	 Neutral
+Summary of the paper (what is being proposed and in what context) and a brief justification of your overall recommendation. One paragraph	 The paper proposes a subjectivity model to represent users' sentiment distribution over different topics based on twitter. Although this is an interesting problem, the solutions are primarily based on existing techniques and the experiments do not convincingly establish the superiority of the proposed method over existing models.
+Three (or more) strong points about the paper (Please be precise and explicit; clearly explain the value and nature of the contribution).	 1. It studies a practically interesting problem.
+
+2. The proposed subjectivity model is reasonable.
+
+3. Use real dataset for evaluation.
+Three (or more) weak points about the paper (Please indicate clearly whether the paper has any mistakes, missing related work, or results that cannot be considered a contribution; write it so that the authors can understand what are seen as negative aspect	 1. The novelty is low.
+
+2. Experiments not convincing.
+
+3. Presentation needs improvement.
+Relevant for APWEB	 Yes
+Significance	 No impact
+Technical Depth and Quality of Content	 Syntactically complete but with limited contribution
+Detailed Evaluation (Contribution, Pros/Cons, Errors); please number each point	 The subjectivity model is natural and straightforward. Nothing really new there. The main techniques for topic analysis and sentiment analysis are directly from existing work. The main contribution of the work is not clear, maybe it is the way the two existing techniques are combined. The experiments show that the method has some promise but fail to show it is better than two existing methods (TSM and JST).
+
+The SentiStrength package you use is for analyzing short informal text of social media. When you combined the tweets of a user into a single document, the document is no longer short. Will this affect the application/effectiveness of this system? You also mention 1 as neutral and [1, 5] as positive, seem to contradict each other.
+
+There are quite a few typos in the last several pages of the paper.
+
+
+ 
+

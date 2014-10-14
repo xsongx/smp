@@ -1,0 +1,400 @@
+
+%%%%%%%%%%%%%%%%%%%%%%% file typeinst.tex %%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% This is the LaTeX source for the instructions to authors using
+% the LaTeX document class 'llncs.cls' for contributions to
+% the Lecture Notes in Computer Sciences series.
+% http://www.springer.com/lncs       Springer Heidelberg 2006/05/04
+%
+% It may be used as a template for your own input - copy it
+% to a new file with a new name and use it as the basis
+% for your article.
+%
+% NB: the document class 'llncs' has its own and detailed documentation, see
+% ftp://ftp.springer.de/data/pubftp/pub/tex/latex/llncs/latex2e/llncsdoc.pdf
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\documentclass[runningheads,a4paper]{llncs}
+
+
+\setcounter{tocdepth}{3}
+\usepackage{graphicx}
+%
+\usepackage{mathptmx}      % use Times fonts if available on your TeX system
+%
+% insert here the call for the packages your document requires
+\usepackage{latexsym}
+\usepackage{url}
+\usepackage{changepage}
+\usepackage{amssymb,amsmath}
+\usepackage[colorlinks,citecolor=blue,linkcolor=blue]{hyperref}
+\usepackage{color}
+\usepackage{mdwlist}
+\usepackage{subfigure}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\renewcommand{\algorithmicrequire}{ \textbf{Input:}} %Use Input in the format of Algorithm
+\renewcommand{\algorithmicensure}{ \textbf{Output:}} %UseOutput in the format of Algorithm
+%\spnewtheorem{definition}{Definition}{\bf}{\rm}
+\spnewtheorem{hypothesis}{Hypothesis}{\bf}{\rm}
+
+\usepackage{url}
+\urldef{\mailsa}\path|{xsongx,jtaotang,tingwang}@nudt.edu.cn| 
+%\urldef{\mailsb}\path|jtaotang,|
+%\urldef{\mailsc}\path|tingwang}@nudt.edu.cn|    
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+
+\begin{document}
+
+\mainmatter  % start of an individual contribution
+
+% first the title is needed
+\title{Topic Related Opinion Integration for Users of Social Media}
+
+% a short form should be given in case it is too long for the running head
+%\titlerunning{Lecture Notes in Computer Science: Authors' Instructions}
+
+% the name(s) of the author(s) follow(s) next
+%
+% NB: Chinese authors should write their first names(s) in front of
+% their surnames. This ensures that the names appear correctly in
+% the running heads and the author index.
+%
+\author{Xie Songxian
+%\thanks{Please note that the LNCS Editorial assumes that all authors have used
+%the western naming convention, with given names preceding surnames. This determines
+%the structure of the names in the running heads and the author index.}%
+\and Tang Jintao\and Wang Ting
+}
+
+%\authorrunning{Lecture Notes in Computer Science: Authors' Instructions}
+% (feature abused for this document to repeat the title also on left hand pages)
+
+% the affiliations are given next; don't give your e-mail address
+% unless you accept that it will be published
+\institute{%School of Computer Science, National University of Defense Technology,\\
+Yanwachi Street of Changsha, Hunan, China, 410073\\
+\mailsa\\
+}
+%\mailsb\\
+%\mailsc\\
+%\url{http://www.nudt.edu.cn}
+
+%
+% NB: a more complex sample for affiliations and the mapping to the
+% corresponding authors can be found in the file "llncs.dem"
+% (search for the string "\mainmatter" where a contribution starts).
+% "llncs.dem" accompanies the document class "llncs.cls".
+%
+
+%\toctitle{Lecture Notes in Computer Science}
+%\tocauthor{Authors' Instructions}
+\maketitle
+
+
+\begin{abstract}
+Social media such as Twitter, has become a valuable source for mining opinions of users about all kinds of topics. In this paper we study how to automatically integrate topic related opinions expressed by a user in User-Generated Content (UGC). We propose a subjectivity model by combining topics and fine-grained opinion towards each topic, and design an efficient algorithm to establish the model. We verify the effectiveness of our model qualitatively and quantitatively in a series of experiments on real Twitter data. Results show that the proposed model is effective and can generate useful aligned integrated opinion summaries of users. Futhermore, the proposed model is more suitable for social media context, thus can get better performance in a opinion prediction task. 
+\keywords{LDA, social media, opinion integration, subjectivity model}
+\end{abstract}
+
+\section{Introduction}
+\label{sec1}
+
+With the rise of content-based social media such as Twitter, millions of users are more and more willing to publish online short messages to express their opinions on a great variety of topics they are interested in. The wide coverage of topics, dynamics of discussion, and abundance of opinions imbeded in the social media data make them extremely valuable source for mining users' opinions about all kinds of topics (e.g., products, political figures, etc.), which in turn can enable a wide range of applications, such as opinion search for ordinary users, opinion tracking for business intelligence, and user behavior prediction for targeted advertising. 
+However, with such a large scale of information source, it is quite challenging to integrate and digest all the opinions from different users. For example, a query ``iPhone'' on Twitter (as of Jan. 14, 2014) returns 830,879 tweets of 231,233 users, suggesting that there are many users have expressed opinions more than once about iPhone in their tweets. To enable an application to benefit from all kinds of opinions of different users, it is thus necessary to automatically integrate and present an overall opinion summary for each user \cite{lu2008opinion}. In fact, users often publish several messages on the topics they are interested in, therefore how to find these topics and integrate opinions towards each topic scattered in many independent tweets of a user poses special challenge for opinion mining related researchers.
+
+In this paper, we propose a two-part model (name as subjectivity model) by incorporating topics and opinions into one framework, in which part one represents topics of interest distribution of users, while part two represents the distribution of opinions towards these topics. Specifically, we propose a general method to solve this integration problem in three steps illustrated as in Figure~\ref{fig1}: (1) extract topics of interest from tweets of a user using user-level LDA; (2) extract separate opinion and topic for each tweet with sentiment and topic analysis  (3) summarize and integrate the extracted opinions towards each topic to form a subjectivity model for each user.
+\begin{figure}[htb]
+\centering
+\includegraphics[width=4.2in,height=2.2in]{procedure.pdf}
+\caption{Framework of two-parts subjectivity model.}
+\label{fig1}
+\end{figure}
+
+%Several studies have tried to combine sentiment into a unified generative topic model to mine topic related sentiments in reviews or blogsphere. For example, Mei \emph{et al.}~\cite{mei2007topic} proposed Topic-Sentiment Mixture (TSM) model that can reveal latent topics of a blog and the topics associated sentiments. Lin \emph{et al.}~\cite{lin2009joint} proposed a Joint Sentiment/Topic (JST) model based on LDA that can detect topic and sentiment simultaneously in reviews. This paper presents a comparative study of these closely related generative models for unsupervised user level opinion mining.
+%This paper makes the following contributions:
+%\begin{itemize}
+%\item We define a new problem of opinion integration at user-level. To the best of our knowledge, there are few works that meet such a problem.
+%\item We propose a two-parts model and a separate framework for integrating opinions scattered around in tweets of a user for the topics he is interested in.
+%\item We evaluate the proposed method both qualitatively and quantitatively comparing with state-of-the-art generaitve models. The results show that our method is effective for integrating opinions for users and a link prediction task.
+%\end{itemize}
+%Collecting and digesting opinions about a topic from different users are critical for many tasks such as shopping, medical decision making, and social interactions. Our proposed method is quite general and can be applied to integrate opinions about any topic in any domain, thus potentially has many interesting applications. 
+
+The rest of the paper is organized as follows. In Section 2, related works are presented, then we formally define the novel problem of opinion integration in Section 3. After that, we present our model and analyze the difference with generative model in Section 4. We discuss our experiments and results in Section 5. Finally, we conclude in Section 6.
+
+\section{Related Works}
+\label{sec2}
+
+Sentiment analysis is a popular research area and previous researches have mainly focused on reviews or news comments \cite{pang2008opinion,liu2012sentiment}. 
+Recently, there have been many works on sentiment analysis on Twitter, mainly focusing on the tweet level \cite{barbosa2010robust,davidov2010enhanced,jiang2011target,li2010micro,tan2011user}, of which, the techniques employed are generally standard tweet-level algorithms that ignore many special characteristics of social media. There have been also some previous works on automatically determing user-level opinions or ideology \cite{mostafa2013more,malouf2008taking}, generally looking at information embeded in the contents that the users generate. Most of related researches mainly focused on identification of sentimental object \cite{liu2010comment}, or detection of object’s sentimental polarity \cite{zhai2011constrained} without considering the topic aspects. 
+
+Since the introduction of LDA model \cite{blei2003latent}, various extended LDA models have been used for topic extraction from large-scale corpora at user level \cite{rosen2004author,ramage2009labeled}. Topic models can also be utilized in sentiment analysis to correlate sentiment with topics. Mei \emph{et al.}~\cite{mei2007topic} and Lin \emph{et al.}~\cite{lin2009joint} incorporated topic models and sentiment analysis for reviews and blogs. 
+
+\section{Opinion Integration Problem}
+\label{sec3}
+
+As we describe in Section~\ref{sec1}, a user usually publishes multiple messages on multiple topics when he using social media. Therefore what's the opinion of a user on a special topic can not be determined from just one tweet, but should be integrated from all the topic related tweets he has published. In this paper, we put forwad a new problem which is defined as \textbf{Opinion Integration Problem} (OIP). We focus on user-level rather than tweet-level opinion because the end goal of opinion mining technologies is to find out what a person thinks but not what only a piece of message states, and determining the opinion expressed in individual text is usually a middle step for that ultimate objective. Additionally, it is plausible that there are cases where opinions of a user in one tweet is ambiguous because they are restricted to be so short that the context of its opinion is misssing, but his overall opinion can be determined by looking at his collection of tweets \cite{tan2011user}. 
+We illustrate a typical scenario of user-level topic related opinion integration problem on Twitter in Figure~\ref{fig2}.
+\begin{figure}[htb]
+%\setlength{\belowcaptionskip}{-0.2cm} 
+\centering
+\includegraphics[width=3.5in,height=1.0in]{ego.pdf}
+%\vspace{-4em}
+\caption{Illustration of Opinion Integration Problem.}
+\label{fig2}
+\end{figure}
+\begin{definition}[Opinion Integration Problem]
+As shown in the figure, there is a heterogeneous network of Twitter consisted of users set $ V=\left\{ u_{i} \right\} $, directional relations set $ E=\left\{(u_{i},u_{j})| u_{i},u_{j} \in V\right\} $ of all users, and their associated tweets $ M_{i}=\left\{ m_{i} \right\} $, in which topics (denoted as $ T=\left\{ Topic_{j} \right\} $) and opinions of tweets can be determined and extracted. For a user $ u_{i} $, his opinion (denoted as $ O_{i,j} $) towards topic $ Topic_{j} $ is not the opinion imbeded in his single tweet $ m_{i} $, but the integrated opinion from all his tweets $ M_{i}=\left\{ m_{i} \right\} $. 
+\end{definition}
+
+There are two important factors that must be taken into considerations for the OIP problem. Firstly, topics both users and tweets talk about should be dertermined in a same topic space so as the target of opinion is normalized. Secondly but most importantly, opinions and topics are closely related, tweets of a user around some topic often cover a mixture of features related to that topic with different preferentials. Different opinions may be expressed by the user towards different features, where users may like some aspects of an topic but dislike other aspects. Therefore, how to integrate all opinions of tweets related to a topic into one opinion and represent it reasonably poses special challenge. In this paper, we propose a novel subjectivity model to meet these two chalenges.
+%There are different ways to meet such a challenge, generatively as TSM model or separately as we describe in this paper, and we will define our model and compare them in this paper. 
+
+\section{Subjectivity Model}
+\label{sec4}
+
+In this section, we give a formal definition of the model we work with to meet the challenges of OIP problem, which has been defined and used in our previous retweeting behavior analysis work \cite{xieresonance}. Here we only repeat the definition and the algorithm of model establishment, for more details, please refer to our paper \cite{xieresonance}. Usually user-level opinion is to classify each user's sentiment on a specific topic into one of two polarities: ``Positive'' and ``Negative''. ``Positive'' means that the user supports or likes the target topic, whereas ``Negative'' stands for the opposite. However in our model we adopt a broad ``opinion'' definition as sentiment coverage towards a topic over a fine-grained sentiment strength values to differentiate subtle opinions of users, for example one is more positive about a topic with sentiment strength 8 than another user with sentiment strength 7. The notion of ``opinion'' is quite vague; we adopt this broad definition to ensure generality of the model. We frame the model in the context of Twitter to keep things concrete, although adaptation of our model to other social network settings is straightforward. We name our model as ``\textbf{subjectivity model}'' as it models the subjective information in the content generated by a user. Therefore, we give a formal definition of the subjectivity model under the context of Twitter as follows.
+
+\subsection{Definition}
+\label{definition}
+
+Let $G=\left( V,E \right) $ denote a social network on Twitter, where $ V $ is a set of users, and $ E\subset V\times V $ is a set of follow relationships between users. For each user $ u \in V $, there is a tweets collection $ M_{u} $ denoting his message history. We assume that there is a topic space $ T $ containing all topics users in $ V $ talk about, and a sentiment strength space $ S $ to evaluate their opinions towards these topics. 
+For the ``subjectivity'' of a user $ u  \in V $, we refer to both topics and opinions articulated in his tweets collection $ M_{u} $.  
+\begin{definition}[Subjectivity Model]
+The subjectivity model $ P \left( u \right) $ of user $ u $, is the combination of topics $\left\lbrace  t \right\rbrace $ the user talks about in topic space $T$ and his opinions $\left\lbrace O_{t}\right\rbrace $ towards each topic distributed over sentiment strength space $ S $. 
+\begin{equation}
+\label{usermodel}
+P \left( u \right) = \lbrace \left( t, w_{u} \left( t \right), \lbrace d_{u,t} \left( s \right)|s \in S \rbrace \right) |  t \in T \rbrace
+\end{equation}
+where:
+\begin{itemize}
+\item with respect to user $ u $, for each topic $t \in T$, its weight $ w_{u} \left( t \right)$ represents the distribution of the user's interests on it, subject to $ \sum_{t=1}^{|T|}w_{u} \left( t \right)=1 $.
+\item opinion of the user towards topic $t$ is modelled as a topic related sentiment distribution over sentiment strength space $ S $, $O_{t}=\lbrace d_{u,t} \left( s \right)|s \in S \rbrace $, subject to $ \sum_{s=1}^{|S|} d_{u,t} \left( s \right)=1$.
+\end{itemize}
+\end{definition}
+
+%subjectivity model captures user’s subjectivity by considering both topic and opinion simultaneously. Interests weights of a user are modelled by a topic distribution and opinion of a user towards each topic is modelled  with a distribution over sentiment strength space. 
+Subjectivity model aims at obtaining the topic related refined sentiment for investigating user-level opinion mining, which can get a comprehensive understanding of the subjectivity for a user by modelling both his topic of interests and opinion towards each topic.. 
+%Unlike previous works to do document-level sentiment analysis, which either caculate the overall document sentiment or model aspect related opinions as sentiment polarity classification \cite{tan2011user}, our model 
+
+\subsection{Establishment of Subjectivity Model }
+\label{establish}
+
+According to the definition of subjectivity model , there are two distributions to model the subjectivity: the topic distribution and the opinion distribution for each topic. Both of them need to be inferred from historic content produced by users.
+%However, content analysis on Twitter is challenging: the volume of tweets is so huge while a single tweet is very short with limit of 140 characters, and informal languages are widely used, which make many supervised learning approaches and natural language processing techniques invalid \cite{cambria2014jumping}. 
+%Hence effectively modeling content on Twitter requires techniques that can readily adapt to these challenges and require little supervision. 
+%We establish subjectivity model by identifying topics and opinions in an unsupervised way simultaneously. The main advantage of our establishing framework is that it employs social-network structure to help us overcome both the paucity of textual information in short tweets and the lack of a large amount of labeled data \cite{lin2010comparative}.
+%
+%
+%\subsubsection{Topic Analysis}
+%\label{topic}
+%
+%The topics of a tweet are latent and have to be inferred from its content.
+%Previous studies have tried to identify topics from tweets by finding key words \cite{chen2010short}, extracting  entities \cite{abel2011analyzing} or linking tweets to external knowledge categories \cite{macskassy2011people}, however, the sparsity is a main problem for these methods because even users have common local topics they still might refer to a topic with different vocabulary.
+%Several works show that topic models such as LDA model \cite{blei2003latent} have been efficient ways to characterize latent topics of large volume corpus.  
+%Topics of LDA are broader in concept, since a single topic consists of the whole collection of related words. 
+%Therefore we adopt a user-level LDA model to find latent topics for users.
+%To distill the topics, documents of LDA should naturally correspond to tweets content. 
+%As our goal is to understand the topics that each user is interested in rather than the topics each single tweet talks about, we aggregate the tweets published by each user into a single document, and replace documents of LDA with aggregated tweet documents. 
+%So a document stands for a user in our model, and a user can be represented as a multinomial distribution over topics, which corresponds to the topic distribution of the user's subjectivity model.
+%
+%Formally, given a set of users $ V $ and the number of topics $ K $, a user $u$ ($ u \in V $) could be represented by a multinomial distribution $ \theta_{u} $ over topics with a Dirichlet prior parameterized by $ \alpha $. 
+%A topic $ k $ ($ k \in K $) is represented by a multinomial distribution $ \beta_{k} $ with another Dirichlet prior parameterized by $ \eta $. 
+%The parameters $ \theta_{u} $ and each $ \beta_{k} $ can be estimated by Gibbs sampling or variational inference.
+%We use variational inference-based topic model package Gensim \cite{rehurek_lrec}, which adopts an efficient batch-based online inference algorithm and can easily adapt to new document.
+%
+%\subsubsection{Opinion Analysis}
+%\label{sentiment}
+%
+%Users often express opinions towards their topic of interests by publishing topic-related tweets. 
+%In order to explore the opinions of users, we need to understand sentiment imbedded in each tweet.
+%Sentiment analysis techniques mainly include machine learning and rule-based approaches. 
+%Machine learning approaches often need labelled data for the training process, which is often impossible for Twitter because of the large volume of tweets and its dynamic language characteristics. Therefore we adopt rule-based approaches, which could adapt to Twitter with good flexibility by changing its particular characteristics into rules \cite{thelwall2010sentiment}.
+%
+%The SentiStrength package has been built especially to cope with sentiment analysis in short informal text of social media \cite{thelwall2010sentiment}. 
+%It combines lexicon-based approaches with sophisticated linguistic rules adapted to social media, which is suitable for analyzing sentiment of tweets in our research settings. 
+%SentiStrength assigns two values to each tweet standing for sentiment strengths: a positive (within $ [1,5] $) and a negative (within $ [-5,-1] $) sentiment measurement. 
+%Sentiment assigned by SentiStrength is not a simple binary value but a fine-grained strength, which can catch fine sentiment distributions in a user's subjectivity model. 
+%For the convenience of calculation, we map the output of SentiStrength to a sequential discrete sentiment strength space $ [0, 8] $ as follows: 
+%\begin{equation}
+%\label{opinionmap}
+%o= \left\{ 
+%\begin{array}{lll}
+%{p+3} &  \qquad if \; \vert p \vert > \vert n \vert \\
+%{n+5} &  \qquad if \; \vert n \vert > \vert p \vert \\
+%{4}  &   \qquad if \; \vert p \vert = \vert n \vert
+%\end{array}
+%\right.
+%\end{equation}
+%Where $ p $ denotes the positive setiment value and $ n $ denotes negative sentment value of SentiStrength.
+%To be aligned with sentiment polarity label, in the sentiment strength space $ [0, 8] $, value 4 and 5 indicate neutral sentiment, while values above 5 indicate positive sentiment and values below 4 indicate negative sentiment. With the sentiments of all tweets, we can aggregate opinions towards a topic as a sentiment distribution over sentiment strength space $ [0, 8] $.
+%
+%\subsubsection{Concrete subjectivity model}
+%\label{concrete}
+
+For users set $ V $ of a social network, we denote tweets set published by a user $ u \in V $ as $ M_{u}=\left\lbrace m_{i} \right\rbrace$. $ M_{u} $ is concatenated to a document $ d_{u} $ to construct Topic Space $ T=\left\lbrace t_{i} \vert i=1, \cdots, K \right\rbrace $ with LDA model.
+A topic model is built with parameter $ \theta $ representing the distribution of each user over topics in the Topic Space $ T $, and
+parameter $ \beta $ represents the distribution of each topic over the vocabulary of all tweets. SentiStrength is applied to each tweet $ m $ in collection $ M_{u} $ and outputs sentiment strength $ s_{m} $ for tweet $ m $. 
+With statistical topic analysis and opinion analysis for each user and tweet, we put forward an novel algorithm to concrete subjectivity model $ P(u) $ for user $ u $ as algorithm~\ref{alg1}:
+
+\begin{algorithm}[htb] 
+\caption{ Establishment of subjectivity model .} 
+\label{alg1}
+\begin{algorithmic}[0] %这个1 表示每一行都显示数字
+\REQUIRE ~~\\ %算法的输入参数：Input
+The users set of a local network, $ V $;\\
+The tweets set published by each user $ u $, $ M_{u} $;\\
+\ENSURE ~~\\ %算法的输出：Output
+The subjectivity model for each user $ u $, $ P(u) $;
+\STATE Topic analysis with a user-level LDA, getting a topic model $P(\theta,\beta|M_{u},V)$; 
+\label{ alg1:topic }%对此行的标记，方便在文中引用算法的某个步骤
+\FORALL {tweet $ m \in M_{u} $}
+\label{alg1:sentiment}
+\STATE Sentiment analysis, outputting sentiment of $ m $, $ s_{m} $;
+\ENDFOR
+\FOR {user $ u \in V$}
+\STATE the topic distribution is the corresponding component of parameter $ \theta $, $ \theta_{u} $; \\
+\STATE the topics he tweets about are $ Z_{u}= \left\lbrace t \vert p\left( t \vert \theta_{u} \right)>0, t \in T \right\rbrace $; 
+\ENDFOR
+\FOR {tweet $ m \in M_{u} $}
+\STATE topics of $ m $ can be identified by the topic model:
+\begin{equation}
+\label{tweettopic}
+Z_{m} =\left\lbrace t \vert p\left( t \vert \theta, \beta, Z_{u} \right)>0, t \in T \right\rbrace.
+\end{equation}
+\ENDFOR
+\FOR { each topic $ t \in Z_{u} $ }
+\FOR { sentiment value $ s \in S $}
+\STATE count the number of tweets which talk about topic $ t $ with sentiment value $ s $: $ N_{s}=\sum_{m \in M_{u}} I\left( s_{m} \right) ,  if  s_{m}=s \& t \in Z_{m} $;
+\ENDFOR
+\STATE calculating opinion towards topic $ t $: $ O_{t} = \left\{ \frac{N_{s}}{\sum_{s \in S} N_{s}} |s \in [0,8] \right\}  $.
+\ENDFOR
+\STATE establishing subjectivity model of user $ u $:
+\begin{equation}
+\label{subuser}
+P\left( u \right)= \left\lbrace \left( t, p\left( t \vert \theta_{u} \right), \left\{ \frac{N_{s}}{\sum_{s \in S} N_{s}} \right\}  \right)  \vert t \in Z_{u}, s \in S  \right\rbrace.
+\end{equation}
+\RETURN $P(u)$; %算法的返回值
+\end{algorithmic}
+\end{algorithm}
+In the algorithm,  we assume the sentiment of tweet $ m $ is related to every topic it talks about in $ Z_{m} $ for simplicity.
+
+\subsection{Comparison with Generative Model}
+\label{comparison}
+
+Several generative models unifying topics and sentiment have been proposed, and they extend basic topic model to explain the sentiment related to topic from documents such as reviews or comments \cite{mei2007topic,lin2009joint}. Topic Sentiment Mixture (TSM) model \cite{mei2007topic} represents the sentiment as a language model separated from topics, which means TSM considers the topic and sentiment orthogonally, the word samples from either topics or sentiments. Joint Sentiment/Topic (JST) model \cite{lin2009joint} presents a novel way to detect the sentiment of document with topic extraction and its sampling process considers that the topics are associated with sentiment and document, which can model the topic and sentiment simultaneously. These models are similar as our work in mining topic-related opinion at user (document) level, all of which try to model topic and sentiment at the same time in a generative way. Usually they learn a general word-sentiment distribution to model the sentiment of blogs or reviews, which may not work well for short and informal social media languages such as tweets. Compared to the traditional topic-based representation, sentiment representation is deemed to be more challenging as sentiment is often embodied in subtle linguistic mechanisms such as the use of sarcasm or incorporated with highly domain-specific information. Intuitively, sentiment is dependent on contextual information, such as language usage characteristics. Sentiment of tweets is determined not only by formal words but also by various special characteristics of Twitter languages such as emoticon, capitalized words, repeated letters and exclamation mark, etc. Those features can not be easily modeled by a probabilistic distribution.  However, rule-based sentiment analysis methods can catch such subtle sentiment of tweets by transforming the characteristics into rules. Therefore, our model is more suitble for integrating topic related opinion of users on social media. 
+
+\subsection{Application of Subjectivity Model}
+\label{application}
+
+The learned subjectivity model can be used to help with many applications such as user opinion mining and user behavior prediction (retweet, follow, etc). Here we illustrate one application on , i.e., how the learned model can help improve the performance of user opinion prediction.
+Our strategy is based on the premises that users usually tend to express their opinions consistently. In other words, positive and negative opinions are not randomly expressed by people. E.g, a user who supports a candidate in an election will tend to post positive tweets on a regular basis. Technically, social theories say that the user exhibits a varying degree of bias, which is his subjectivity \cite{walton1991bias}. 
+
+We formulate the opinion prediction of a user as a triplet in the form of $ < author, m, t >$, where $author$ is the user who post tweet $ m $, which talks about topic $ t $. The goal is to predict the polarity $ p=\left\{positive,negative\right\} $ of tweet $ m $ toward topic $ t $. For such a problem, the dominant approach relies on extracting textual patterns from tweets and exploiting these patterns to predict polarity.
+
+However subjectivity model of a user provides information that is more robust to a single tweet short of context, as it is more consistent than typical textual information. Thus, we propose an alternate approach that is based on subjectivity model. More specifically, the topic tweet $ m $ talks about can be identified with equation~\ref{tweettopic} in algorithm~\ref{alg1}:
+\begin{equation}
+\widehat{t}=argmax(\widehat{P}(t| \theta,\beta ,Z_{u})|t).
+\end{equation}
+Thus opinion distribution of the user $author$ can be achieved from his subjectivity model $ P(author) $: $ O_{author,\widehat{t}} $, which is a sentiment value distribution. We can get a normalized sentiment value of the user on topic $ \widehat{t} $:
+\begin{equation}
+\widehat{S_{m}}=\sum_{i \in T}d_{i}\ast v_{i}
+\end{equation}
+where $ v_{i} $ denotes the sentiment value and $ d_{i} $ denotes the corresponding sentiment distribution.
+Now we can predict the polarity $ p $ with the normalized sentiment value of tweet $ m $:
+\begin{equation}
+\label{polarity}
+p= \left\{ 
+\begin{array}{lll}
+{positive} &  \qquad if \; \widehat{S_{m}} > 5 \\
+{negative} &  \qquad if \; \widehat{S_{m}} < 4 \\
+{neutral}  &   \qquad others \;  
+\end{array}
+\right.
+\end{equation}
+
+\section{Experiment}
+\label{sec5}
+
+\subsection{Dataset and Settings}
+
+We use an off-the-shelf dataset \cite{DBLP:conf/kdd/LiWDWC12}, which is crawled from Twitter through its open Api. The details about the dataset can be summarized as Table~\ref{tab1}. 
+
+\begin{table}
+\centering
+\caption{Twitter Dataset Statistics}
+\label{tab1}
+\begin{tabular}{ll|ll}
+\hline
+Total users  & 139,180 & Friends per user & 14.8 \\
+Total edges &  4,175,405 & Followers per user & 14.9  \\
+Total tweets & 76,409,820 & Tweets per user & 549 \\
+\hline
+\end{tabular}
+\end{table}
+
+It is time-consuming to establish subjectivity model with the 139,180 users directly for the computational complexity of LDA. However, the principle of homophily \cite{lazarsfeld_friendship_1954}, or ``birds of a feather flock together'' \cite{mcpherson2001birds} —suggests that users that are``connected'' closely may tend to talk about similar topics and hold similar opinions \cite{thelwall2010emotion}. On Twitter, the connections a user creates may correspond to approval or a desire to pay attention, or suggestive of the possibility of shared topics and opinions. Therefore we adopt the community structure of social network to divide the  139,180 users into different community and establish subjectivity model for a user in his community subnetwork. The communities are found with the packages igraph\footnote{\url{http://igraph.org/}}. There are 106 communities in the full network, and 73 communties have users less than 15, for which topics can not be found effectively with LDA, so we filter out users in these communities. At the same time, we also filter out 15,756 users who are inactive with tweets less than 5, only tweet themselves with words less than 3, or only publish content with url links. In the final dataset, there are 122,329 users distributed in 33 communities. The subjectivity model for each user is established within his own community as algorithm~\ref{alg1}.
+
+Besides our model, we also conduct a set of comparing experiments on both JST and TSM. The symmetry Dirichlet prior $ \alpha $ and $ \beta $ were set to $ 50/T $ and 0.01 respectively for all models. The asymmetry sentiment prior $ \gamma $ empirically was set to (0.01, 1.8) for JST. Results of JST were averaged over 5 runs with 2000 Gibbs sampling iterations.
+
+\subsection{Case Study}
+
+In order to qualitatively evaluate the effectiveness of our method, we give a vivid example of a user's subjectivity model, who has published 533 tweets. All his tweets are illustrated as Figure~\ref{fig5:a} in a word-cloud way.
+
+\begin{figure}[htb]
+\centering
+\subfigure[Word Cloud.]{
+	\label{fig5:a}
+	\includegraphics[width=1.8in,height=1.5in]{example.pdf}
+	}%
+\subfigure[Subjectivity Model.]{
+    \label{fig5:b}
+    \includegraphics[width=3.2in,height=1.5in]{fig1.pdf}
+%    \end{minipage}
+	}
+	\caption{ In the subjectivity model, left sub-graph denotes interests distribution on topic 2, 32 and 83: $ (  w_{u}\left( 2 \right)=0.08,w_{u}\left( 32 \right)=0.48, w_{u}\left( 83 \right)=0.44)  $. The right sub-graph denotes opinions towards topics: $ O_{2}=( d_{u,2} \left( 4 \right)=0.5, d_{u,2} \left( 5 \right)=0.5)$, $O_{32}=(d_{u,32} \left( 4 \right)=1.0) $, $ O_{83}=( d_{u,83} \left( 4 \right)=0.5, d_{u,83} \left( 5 \right)=0.5 ) $.}	
+	\label{fig5}
+\end{figure}
+
+Figure~\ref{fig5:b} is the visualized subjectivity model of the user in a $ [0,100] $ topic space and a $ [0,8] $ sentiment strength space, which is constructed according to our method. 
+It is obvious that the user is interested in three topics (topic 2: ``\#Obamacare'', topic 32: ``\#libya'' and topic 83:``\#occupywallst''), and  the left part of Figure~\ref{fig5:b} denotes the weights of his topics of interest. The right part denotes the opinions of the user towards three topics, in which he is neutral to topic ``\#libya'' with 100\% distribution on sentiment strength value 4, positive to topic ``\#Obamacare'' and ``\#occupywallst'' with 50\% on value 4 and 50\% on value 5. 
+From the example, it is demonstrated that our model can give a detail description for the subjectivity of users in that it can model not only the interest distribution but also opinion coverage over a fine-grain sentiment.
+
+\subsection{Opinion Prediction Performance}
+To directly evaluate the effectiviness of our model quantitatively, we compare our model with other two generative topic-sentiment model (TSM and JST) and an off-the-shelft sentiment analysis mothod (OpinionFinder (OF)\footnote{See \url{http://www.cs.pitt.edu/mpqa/opinionfinderrelease/}}) in the performance of opinion prediction. OpinionFinder is a publicly available software package for sentiment analysis that can be applied to determine sentence-level subjectivity, i.e. to identify the emotional polarity (positive or negative) of sentences \cite{wilson2005recognizing}. 
+
+We randomly select 1,000 target users from our dataset with at least 80 tweets, and select one random tweet for each user from his tweets collection to compose a 1,000-tweets test set. In order to identify topic of each tweet more obviously, the tweets with hashtag are prior to be selected. All 1,000 tweets in the test set are manually labelled with sentiment polarity as the golden standard. The number of topic is set to 50, 100, 150 and 200 iteratively. Accuracy is used as our performance measurement, and the result is list in Table~\ref{tab2}.
+\begin{table}[htb]
+\centering
+\caption{Accuracy performance. A significant improvement over OF with $ \ast $.}
+\label{tab2}
+\begin{tabular}{l|llll}
+\hline
+Method & 50 & 100 & 150 & 200\\
+\hline
+OF &  65.85\%& & & \\
+TSM & 63.46\%& 72.94\% $ \ast $  &67.83\% & 66.65\% \\
+JST & 61.25\% & 68.57\% $ \ast $ & 75.88\%  $ \ast $ & 67.03\%\\
+SUB & 71.53\% $ \ast $ & 81.05\% $ \ast $ & 78.32\% & 74.54\%\\
+\hline
+\end{tabular}
+\end{table}
+
+As can be observed from the result table that: firstly, the performance of OpinionFinder is the lowest with 65.85\% accuracy, and we think the reseason lying in that it is designed for the review and not adapts to tweets with informal language usage; secondly, overall, the two generative models outperform OpinionFinder, which demonstrates the importance of relating sentiment to the topics of users; finally, our model (SUB) outperforms OpinionFinder significantly with all four topic settings, and compared with two generative models, our model outperforms TSM significantly, and get a little better performance than JST. We think it is because sentiment analysis technique of our model is more suitable for the Twitter language, for it can extract subltle sentiment imbeded in special language characteristcs such as repeated letters and emoticons.
+
+\section*{Conclusion}
+\label{sec6}
+
+In this paper, we define and investigate a novel opinion integration problem for social media usrs.
+We propose a subjectivity model to solve this problem in a three-stage framework and design an algorithm to establish the subjectivity model from historical tweets of users. With this model, we can automatically generate an integrated opinion summary that consists of both topics of interest distribution and topic related opinion distribution for a user. The proposed model is compared with generative models such as TSM and JST model to show that it is more suitable for the social media language. Experiments on Twitter data show that the proposed model can effectively describe topic related opinions with two probabilistic distributions and clearly outperforms generative models in a opinion prediction task. In the future, we will apply our model in several social network analysis applications to testify its effectiveness.
+
+\section*{Acknowledgments}
+
+The research is supported by the National Natural Science Foundation of China (Grant No. 61170156 and 61202337).
+
+\bibliographystyle{splncs}
+\bibliography{apweref}
+\end{document}
